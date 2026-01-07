@@ -1,0 +1,36 @@
+@{
+    ViewData["Title"] = "Tambah Produk";
+}
+
+<div class="page-container">
+    <div class="form-container">
+        <h1>Tambah Produk Baru</h1>
+        <form method="post" action="/Products/Create" enctype="multipart/form-data" class="product-form">
+            <div class="form-group">
+                <label for="name">Nama Produk</label>
+                <input type="text" id="name" name="name" required />
+            </div>
+            
+            <div class="form-group">
+                <label for="description">Deskripsi</label>
+                <textarea id="description" name="description" rows="4" required></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="price">Harga (Rp)</label>
+                <input type="number" id="price" name="price" step="0.01" min="0" required />
+            </div>
+            
+            <div class="form-group">
+                <label for="image">Gambar Produk</label>
+                <input type="file" id="image" name="image" accept="image/*" />
+            </div>
+            
+            <div class="form-actions">
+                <a href="/Products" class="btn-secondary">Batal</a>
+                <button type="submit" class="btn-primary">Simpan Produk</button>
+            </div>
+        </form>
+    </div>
+</div>
+

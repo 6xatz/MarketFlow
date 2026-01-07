@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Marketplace</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <a href="/" class="logo">🛍️ Marketplace</a>
+            <div class="nav-links">
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <a href="/Dashboard">Dashboard</a>
+                    @if (User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value == "Seller")
+                    {
+                        <a href="/Products">Produk Saya</a>
+                        <a href="/Orders/SellerOrders">Pesanan</a>
+                    }
+                    else
+                    {
+                        <a href="/Shop">Belanja</a>
+                        <a href="/Orders/MyOrders">Pesanan Saya</a>
+                    }
+                    <a href="/Account/Logout" onclick="event.preventDefault(); document.getElementById('logoutForm').submit();">Logout</a>
+                    <form id="logoutForm" method="post" action="/Account/Logout" style="display:none;"></form>
+                }
+                else
+                {
+                    <a href="/Shop">Toko</a>
+                    <a href="/Account/Login">Login</a>
+                    <a href="/Account/Register" class="btn-nav">Daftar</a>
+                }
+            </div>
+        </div>
+    </nav>
+
+    @{
+        var isAuthenticated = User.Identity?.IsAuthenticated == true;
+        var userRole = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value ?? "Buyer";
+        var displayName = User.Identity?.Name ?? "Pengguna";
+        var avatarInitial = !string.IsNullOrWhiteSpace(displayName)
+            ? displayName.Trim()[0].ToString().ToUpper()
+            : "M";
+    }
+
+    <main>
+        @if (isAuthenticated)
+        {
+            <div class="app-shell">
+                <aside class="sidebar">
+                    <div class="sidebar-header">
+                        <div class="sidebar-avatar">@avatarInitial</div>
+                        <div>
+                            <p class="sidebar-label">Akun</p>
+                            <h3>@displayName</h3>
+                            <span class="sidebar-role">@userRole</span>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-menu">
+                        <p class="sidebar-label">Menu Utama</p>
+                        <a href="/Dashboard">Ringkasan</a>
+                        <a href="/Shop">Toko</a>
+                    </div>
+
+                    @if (userRole == "Seller")
+                    {
+                        <div class="sidebar-menu">
+                            <p class="sidebar-label">Seller Center</p>
+                            <a href="/Products">Produk Saya</a>
+                            <a href="/Products/Create">Tambah Produk</a>
+                            <a href="/Orders/SellerOrders">Pesanan Masuk</a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="sidebar-menu">
+                            <p class="sidebar-label">Buyer Center</p>
+                            <a href="/Shop">Belanja Produk</a>
+                            <a href="/Orders/MyOrders">Pesanan Saya</a>
+                        </div>
+                    }
+
+                    <div class="sidebar-cta">
+                        <p>Kelola aktivitas marketplace Anda langsung dari menu ini.</p>
+                        <a class="btn-sidebar" href="/Account/Logout" onclick="event.preventDefault(); document.getElementById('logoutForm').submit();">Logout</a>
+                    </div>
+                </aside>
+
+                <section class="content-area">
+                    @RenderBody()
+                </section>
+            </div>
+        }
+        else
+        {
+            @RenderBody()
+        }
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Marketplace. Platform jual beli terpercaya.</p>
+        </div>
+    </footer>
+</body>
+</html>

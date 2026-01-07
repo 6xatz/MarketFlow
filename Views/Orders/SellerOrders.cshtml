@@ -1,0 +1,88 @@
+@model List<Marketplace.Models.Order>
+@{
+    ViewData["Title"] = "Pesanan Penjualan";
+}
+
+<div class="page-container">
+    <div class="page-header">
+        <h1>Pesanan Penjualan</h1>
+    </div>
+
+    @if (Model.Count == 0)
+    {
+        <div class="empty-state">
+            <div class="empty-icon">📋</div>
+            <h3>Belum ada pesanan</h3>
+            <p>Pesanan untuk produk Anda akan muncul di sini</p>
+        </div>
+    }
+    else
+    {
+        <div class="orders-list">
+            @foreach (var order in Model)
+            {
+                <div class="order-card">
+                    <div class="order-header">
+                        <div>
+                            <h3>@order.OrderNumber</h3>
+                            <p class="order-date">Pembeli: @order.Buyer.Name</p>
+                            <p class="order-date">@order.CreatedAt.ToString("dd MMMM yyyy HH:mm")</p>
+                        </div>
+                        <div class="order-status status-@order.Status.ToLower()">
+                            @order.Status
+                        </div>
+                    </div>
+                    
+                    <div class="order-items">
+                        @{
+                            var sellerId = int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value);
+                            var sellerItems = order.OrderItems.Where(oi => oi.Product.SellerId == sellerId).ToList();
+                            var sellerTotal = sellerItems.Sum(oi => oi.Price * oi.Quantity);
+                        }
+                        @foreach (var item in sellerItems)
+                        {
+                            <div class="order-item">
+                                <div class="item-info">
+                                    <h4>@item.Product.Name</h4>
+                                    <p>Qty: @item.Quantity × Rp @item.Price.ToString("N0")</p>
+                                </div>
+                                <div class="item-total">
+                                    Rp @((item.Price * item.Quantity).ToString("N0"))
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="order-footer">
+                        <div class="order-total">
+                            <strong>Total: Rp @sellerTotal.ToString("N0")</strong>
+                        </div>
+                        <div class="order-actions">
+                            @if (order.Status == "Pending")
+                            {
+                                <form method="post" action="/Orders/UpdateStatus" enctype="multipart/form-data" class="status-form">
+                                    <input type="hidden" name="orderId" value="@order.Id" />
+                                    <input type="hidden" name="status" value="Shipped" />
+                                    <input type="file" name="shippingProof" accept="image/*" required class="file-input" />
+                                    <button type="submit" class="btn-primary">Kirim & Upload Bukti</button>
+                                </form>
+                            }
+                            else if (order.Status == "Shipped")
+                            {
+                                @if (!string.IsNullOrEmpty(order.ShippingProofImageUrl))
+                                {
+                                    <div class="shipping-proof">
+                                        <h4>📸 Bukti Pengiriman</h4>
+                                        <img src="@order.ShippingProofImageUrl" alt="Bukti Pengiriman" class="proof-image" />
+                                    </div>
+                                }
+                            }
+                            <a href="/Orders/ExportPdf/@order.Id" class="btn-secondary">Download Struk PDF</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+

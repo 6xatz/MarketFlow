@@ -1,0 +1,54 @@
+@model List<Marketplace.Models.Product>
+@{
+    ViewData["Title"] = "Toko";
+}
+
+<div class="page-container">
+    <div class="page-header">
+        <h1>Jelajahi Produk</h1>
+    </div>
+
+    @if (Model.Count == 0)
+    {
+        <div class="empty-state">
+            <div class="empty-icon">🛍️</div>
+            <h3>Belum ada produk</h3>
+            <p>Produk akan muncul di sini</p>
+        </div>
+    }
+    else
+    {
+        <div class="products-grid shop-grid">
+            @foreach (var product in Model)
+            {
+                <div class="product-card shop-card">
+                    @if (!string.IsNullOrEmpty(product.ImageUrl))
+                    {
+                        <img src="@product.ImageUrl" alt="@product.Name" class="product-image" />
+                    }
+                    else
+                    {
+                        <div class="product-image-placeholder">📦</div>
+                    }
+                    <div class="product-info">
+                        <h3>@product.Name</h3>
+                        <p class="product-description">@product.Description</p>
+                        <p class="product-seller">Oleh: @product.Seller.Name</p>
+                        <div class="product-footer">
+                            <p class="product-price">Rp @product.Price.ToString("N0")</p>
+                            @if (User.Identity?.IsAuthenticated == true && User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value == "Buyer")
+                            {
+                                <form method="post" action="/Orders/Create" class="buy-form">
+                                    <input type="hidden" name="productId" value="@product.Id" />
+                                    <input type="number" name="quantity" value="1" min="1" class="quantity-input" />
+                                    <button type="submit" class="btn-primary btn-small">Beli</button>
+                                </form>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+

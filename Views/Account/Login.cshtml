@@ -1,0 +1,38 @@
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="auth-wrapper">
+    <div class="auth-container">
+        <div class="auth-header">
+            <h1>Selamat Datang Kembali</h1>
+            <p>Masuk ke akun Anda untuk melanjutkan</p>
+        </div>
+        
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-error">
+                <span>⚠️</span>
+                <span>@ViewBag.Error</span>
+            </div>
+        }
+
+        <form method="post" action="/Account/Login" class="auth-form">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="nama@email.com" required />
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Masukkan password" required />
+            </div>
+            
+            <button type="submit" class="btn-submit">Masuk</button>
+        </form>
+
+        <div class="auth-footer">
+            <p>Belum punya akun? <a href="/Account/Register">Daftar di sini</a></p>
+        </div>
+    </div>
+</div>

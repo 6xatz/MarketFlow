@@ -1,0 +1,92 @@
+@{
+    ViewData["Title"] = "Dashboard";
+    var userRole = ViewBag.UserRole as string;
+    var userName = ViewBag.UserName as string;
+}
+
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h1>Halo, @userName! 👋</h1>
+        <p>Selamat datang di dashboard Anda</p>
+    </div>
+
+    @if (userRole == "Seller")
+    {
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">📦</div>
+                <div class="stat-info">
+                    <h3>@ViewBag.TotalProducts</h3>
+                    <p>Total Produk</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🛒</div>
+                <div class="stat-info">
+                    <h3>@ViewBag.TotalOrders</h3>
+                    <p>Total Pesanan</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">💰</div>
+                <div class="stat-info">
+                    <h3>Rp @(((decimal)ViewBag.TotalRevenue).ToString("N0"))</h3>
+                    <p>Total Pendapatan</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-actions">
+            <a href="/Products" class="action-card">
+                <div class="action-icon">📦</div>
+                <h3>Kelola Produk</h3>
+                <p>Tambahkan atau edit produk Anda</p>
+            </a>
+            <a href="/Orders/SellerOrders" class="action-card">
+                <div class="action-icon">📋</div>
+                <h3>Pesanan Saya</h3>
+                <p>Lihat dan kelola pesanan</p>
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">🛒</div>
+                <div class="stat-info">
+                    <h3>@ViewBag.TotalOrders</h3>
+                    <p>Total Pesanan</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">⏳</div>
+                <div class="stat-info">
+                    <h3>@ViewBag.PendingOrders</h3>
+                    <p>Menunggu</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">✅</div>
+                <div class="stat-info">
+                    <h3>@ViewBag.CompletedOrders</h3>
+                    <p>Selesai</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-actions">
+            <a href="/Shop" class="action-card">
+                <div class="action-icon">🛍️</div>
+                <h3>Belanja</h3>
+                <p>Jelajahi produk yang tersedia</p>
+            </a>
+            <a href="/Orders/MyOrders" class="action-card">
+                <div class="action-icon">📋</div>
+                <h3>Pesanan Saya</h3>
+                <p>Lihat status pesanan Anda</p>
+            </a>
+        </div>
+    }
+</div>
+

@@ -1,0 +1,42 @@
+@model List<Marketplace.Models.User>
+@{
+    ViewData["Title"] = "Kelola User";
+}
+
+<div class="container">
+    <div class="page-header">
+        <h1>Kelola User</h1>
+        <a href="/Users/ExportExcel" class="btn-primary">Export ke Excel</a>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nama</th>
+                    <th>Email</th>
+                    <th>Tanggal Dibuat</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model)
+                {
+                    <tr>
+                        <td>@user.Id</td>
+                        <td>@user.Name</td>
+                        <td>@user.Email</td>
+                        <td>@user.CreatedAt.ToString("dd MMM yyyy HH:mm")</td>
+                        <td>
+                            <form method="post" action="/Users/Delete/@user.Id" onsubmit="return confirm('Yakin ingin menghapus?');">
+                                <button type="submit" class="btn-danger">Hapus</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+

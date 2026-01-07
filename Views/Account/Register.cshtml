@@ -1,0 +1,51 @@
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="auth-wrapper">
+    <div class="auth-container">
+        <div class="auth-header">
+            <h1>Buat Akun Baru</h1>
+            <p>Daftar sekarang dan mulai berbelanja</p>
+        </div>
+        
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-error">
+                <span>⚠️</span>
+                <span>@ViewBag.Error</span>
+            </div>
+        }
+
+        <form method="post" action="/Account/Register" class="auth-form">
+            <div class="form-group">
+                <label for="name">Nama Lengkap</label>
+                <input type="text" id="name" name="name" placeholder="Nama Anda" required />
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="nama@email.com" required />
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Minimal 6 karakter" required />
+            </div>
+
+            <div class="form-group">
+                <label for="role">Daftar Sebagai</label>
+                <select id="role" name="role" class="form-select">
+                    <option value="Buyer">Pembeli</option>
+                    <option value="Seller">Penjual</option>
+                </select>
+            </div>
+            
+            <button type="submit" class="btn-submit">Daftar</button>
+        </form>
+
+        <div class="auth-footer">
+            <p>Sudah punya akun? <a href="/Account/Login">Masuk di sini</a></p>
+        </div>
+    </div>
+</div>
