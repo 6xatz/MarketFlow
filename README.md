@@ -120,3 +120,7 @@ Marketplace/
 - Responsive untuk mobile dan desktop
 - Animasi smooth dan interaktif
 - Color scheme yang menarik dan profesional
+
+## Documentation
+
+All associated resources are licensed under the [Read-Only Source License](./LICENSE.md).
